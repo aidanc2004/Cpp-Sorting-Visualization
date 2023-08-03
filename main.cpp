@@ -4,12 +4,9 @@
 #include <iostream>
 #include <numeric>
 #include <random>
-
 #include <SFML/Graphics.hpp>
 
-#define SIZE 200
-
-bool selectionSort(std::array<int, SIZE> &array, int step);
+#include "algorithms.hpp"
 
 int main(int argc, char const *argv[]) {
     sf::RenderWindow window(sf::VideoMode(1200, 1000), "Sorting");
@@ -125,18 +122,4 @@ int main(int argc, char const *argv[]) {
     }
 
     return 0;
-}
-
-bool selectionSort(std::array<int, SIZE> &array, int step) {
-    int min = step;
-
-    for (int i = step + 1; i < array.size(); i++) {
-        if (array[i] < array[min]) {
-            min = i;
-        }
-    }
-
-    std::swap(array[min], array[step]);
-
-    return false;
 }
