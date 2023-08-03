@@ -5,8 +5,8 @@
 #include <numeric>
 #include <random>
 #include <SFML/Graphics.hpp>
-
 #include "algorithms.hpp"
+#include "jokeAlgorithms.hpp"
 
 int main(int argc, char const *argv[]) {
     sf::RenderWindow window(sf::VideoMode(1200, 1000), "Sorting");
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
 
     sf::Text text, stepCounter, helpText, doneText;
 
-    text.setString("Selection Sort");
+    text.setString("Bogo Sort");
     text.setFillColor(sf::Color::Green);
     text.setFont(font);
     text.setCharacterSize(20);
@@ -102,7 +102,7 @@ int main(int argc, char const *argv[]) {
         }
 
         if (!done && !paused) {
-            selectionSort(array, step);
+            bogoSort(array, step);
             
             if (std::is_sorted(array.begin(), array.end()))
                 done = true;

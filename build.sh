@@ -1,4 +1,4 @@
-g++ main.cpp algorithms.cpp -o sorting \
+g++ main.cpp algorithms.cpp jokeAlgorithms.cpp -o sorting \
     -fcolor-diagnostics \
     -fansi-escape-codes \
     -Wall -I/opt/homebrew/Cellar/sfml/2.5.1_2/include \
