@@ -1,12 +1,13 @@
-#include <array>
-// Aidan Carey, main.cpp
+// Aidan Carey, Feburary 2026, main.cpp
 
+#include <SFML/Graphics.hpp>
+
+#include <array>
 #include <algorithm>
 #include <ctime>
 #include <iostream>
 #include <numeric>
 #include <random>
-#include <SFML/Graphics.hpp>
 
 #include "algorithms.hpp"
 
