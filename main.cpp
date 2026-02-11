@@ -1,4 +1,6 @@
 #include <array>
+// Aidan Carey, main.cpp
+
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -7,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "algorithms.hpp"
-#include "jokeAlgorithms.hpp"
 
 int main(int argc, char const *argv[]) {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 1200)), "Sorting");
