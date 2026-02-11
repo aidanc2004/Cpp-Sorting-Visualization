@@ -11,65 +11,89 @@
 
 #include "algorithms.hpp"
 
+// Draw the graph on screen with rectangles
+void drawGraph(sf::RenderWindow *window, sf::Vector2u windowSize, std::array<int, SIZE> array) {
+  for (int i = 0; i < SIZE; i++) {
+    int num = array[i];
+
+    // Rectangle height and width
+    float height = num * ((float)windowSize.y / SIZE);
+    float width = ((float)windowSize.x / SIZE);
+
+    // Create and draw rectangle
+    sf::RectangleShape rect(sf::Vector2f(width, height));
+    rect.setFillColor(sf::Color::White);
+    rect.setPosition(sf::Vector2f(width * i, windowSize.y - height));
+    window->draw(rect);
+  }
+}
+
+// Give text color, char size, optionally position at top left
+void setupText(sf::Text *text, int index = -1) {
+  // Color and char size
+  text->setFillColor(sf::Color::Green);
+  text->setCharacterSize(20);
+  
+  // Position
+  if (index >= 0) {
+    text->setPosition(sf::Vector2f(5, 20 * index + 5));
+  }
+}
+
 int main(int argc, char const *argv[]) {
   sf::RenderWindow window(sf::VideoMode(sf::Vector2u(1000, 1200)), "Sorting");
-  //window.setVerticalSyncEnabled(true);
-  window.setFramerateLimit(20);
+  window.setFramerateLimit(20); // Lower framerate to see the sorting
   
-  sf::Vector2u size = window.getSize();
+  sf::Vector2u windowSize = window.getSize();
 
-  // create, fill, and shuffle array
+  // Create, fill, and shuffle array
   std::array<int, SIZE> array;
   std::iota(array.begin(), array.end(), 1);
   std::shuffle(array.begin(), array.end(),
                std::default_random_engine(std::time(0)));
 
-  int step = 0;
-  bool done = false;
+  int  step   = 0;
+  bool done   = false;
   bool paused = false;
 
-  // text at top left
+  // Sorting algorithm to use
+  void (*sortingAlgorithm)(std::array<int, SIZE>&, int) = selectionSort;
+  std::string algorithmName = "Selection Sort";
+  
+  // Text
   sf::Font font("Roboto-Light.ttf");
-  sf::Text text(font), stepCounter(font), helpText(font), doneText(font);
+  sf::Text sortName(font), stepCounter(font), helpText(font), doneText(font);
 
-  text.setString("Selection Sort");
-  text.setFillColor(sf::Color::Green);
-  text.setFont(font);
-  text.setCharacterSize(20);
-  text.setPosition(sf::Vector2f(5, 5));
+  // Sorting algorithm name at the middle top
+  sortName.setString(algorithmName);
+  float sortNameWidth = sortName.getLocalBounds().size.x;
+  float sortNameX = (windowSize.x - sortNameWidth) / 2;  
+  sortName.setPosition(sf::Vector2f(static_cast<int>(sortNameX), 5));
 
-  stepCounter.setFillColor(sf::Color::Green);
-  stepCounter.setFont(font);
-  stepCounter.setCharacterSize(20);
-  stepCounter.setPosition(sf::Vector2f(5, 25));
-
+  // Text at top left
   helpText.setString("Space to pause, R to reset");
-  helpText.setFillColor(sf::Color::Green);
-  helpText.setFont(font);
-  helpText.setCharacterSize(20);
-  helpText.setPosition(sf::Vector2f(5, 45));
-
   doneText.setString("Sorting...");
-  doneText.setFillColor(sf::Color::Green);
-  doneText.setFont(font);
-  doneText.setCharacterSize(20);
-  doneText.setPosition(sf::Vector2f(5, 65));
 
-  // main loop
+  setupText(&sortName);
+  setupText(&helpText, 0);
+  setupText(&stepCounter, 1);
+  setupText(&doneText, 2);
+  
+  // Main loop
   while (window.isOpen()) {
-    // event loop
+    // Event loop
     while (const std::optional event = window.pollEvent()) {
       if (event->is<sf::Event::Closed>()) {
         window.close();
       }
       if (const auto* key_pressed = event->getIf<sf::Event::KeyPressed>()) {
-        // space to pause
+        // Pause
         if (key_pressed->scancode == sf::Keyboard::Scancode::Space) {
           paused = !paused;
         }
-        // r to reset
+        // R to reset
         if (key_pressed->scancode == sf::Keyboard::Scancode::R) {
-          // reshuffle array
+          // Reshuffle array
           std::shuffle(array.begin(), array.end(),
                        std::default_random_engine(std::time(0)));
           step = 0;
@@ -81,36 +105,23 @@ int main(int argc, char const *argv[]) {
 
     window.clear(sf::Color::Black);
 
-    // draw a rectangle for each value
-    for (int i = 0; i < SIZE; i++) {
-      int num = array[i];
+    drawGraph(&window, windowSize, array);
 
-      // height and width of the rectangle
-      float height = num * ((float)size.y / SIZE);
-      float width = ((float)size.x / SIZE);
-
-      // create rectangle and move it to the right place
-      sf::RectangleShape rect(sf::Vector2f(width, height));
-      rect.setFillColor(sf::Color::White);
-      rect.setPosition(sf::Vector2f(width * i, size.y - height));
-
-      // draw rectangle
-      window.draw(rect);
-    }
-
+    // Procced one step
     if (!done && !paused) {
-      selectionSort(array, step);
-            
-      if (std::is_sorted(array.begin(), array.end()))
+      sortingAlgorithm(array, step);
+           
+      if (std::is_sorted(array.begin(), array.end())) {
         done = true;
-            
-      if (!done) step++;
-      else doneText.setString("Done!");
+        doneText.setString("Done!");
+      } else {
+        step++;
+      }
     }
 
     stepCounter.setString("Steps: " + std::to_string(step));
 
-    window.draw(text);
+    window.draw(sortName);
     window.draw(stepCounter);
     window.draw(helpText);
     window.draw(doneText);

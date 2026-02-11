@@ -1,3 +1,5 @@
+// Aidan Carey, Feburary 2026, algorithms.hpp
+
 #pragma once
 
 #include <array>
@@ -5,5 +7,5 @@
 
 #define SIZE 100
 
-bool selectionSort(std::array<int, SIZE> &array, int step);
-bool bogoSort(std::array<int, SIZE> &array, int step);
+void selectionSort(std::array<int, SIZE> &array, int step);
+void bogoSort(std::array<int, SIZE> &array, int step);
