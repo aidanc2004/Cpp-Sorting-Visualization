@@ -2,6 +2,6 @@
 
 #include <array>
 
-#define SIZE 10
+#define SIZE 100
 
 bool selectionSort(std::array<int, SIZE> &array, int step);

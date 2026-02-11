@@ -6,7 +6,6 @@ bool bogoSort(std::array<int, SIZE> &array, int step) {
         return true;
     }
 
-
     std::shuffle(array.begin(), array.end(),
                   std::default_random_engine(std::time(0)));
 
